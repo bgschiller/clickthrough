@@ -3,7 +3,7 @@ import sys
 
 import click
 
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 app.debug = True
@@ -46,10 +46,9 @@ def clickthrough(command):
 
 @app.route('/')
 def hello():
-    return ('<pre>' +
-        '\n'.join('{p.name} : {p.help}, defaults to {p.default}'.format(p=p)
-            for p in app.command.params)
-        +'</pre>')
+    return render_template('default.html',
+        command=app.command,
+        ctx=click.Context(app.command,info_name=app.command.name))
 
 if __name__ == '__main__':
     clickthrough()
